@@ -1,0 +1,53 @@
+---
+# tasks file for gnome_settings
+
+- name: Check for the presence of the 'python3-psutil' package
+  register: psutil
+  ansible.builtin.stat:
+    path:  /usr/share/doc/python3-psutil
+
+- ansible.builtin.debug:
+    msg: "NOTE! The python3-psutil package will now be installed, but this role won't work until the package is fully installed after a reboot."
+  when: psutil.stat.exists != true
+
+- name: If needed, install the 'python3-psutil' layered package
+  become: true
+  when: psutil.stat.exists != true
+  community.general.rpm_ostree_pkg:
+    name: python3-psutil
+    state: present
+    # apply_live: true
+
+# NOTE: This step will be skipped if 'python3-psutil' is not fully present.
+- name: Apply desired gnome_settings via dconf.
+  loop: "{{ dconf_general_settings }}"
+  loop_control:
+    loop_var: dconf_general
+  when: psutil.stat.exists == true
+  community.general.dconf:
+    key: "{{ dconf_general.key }}"
+    value: "{{ dconf_general.value }}"
+    state: present
+
+# NOTE: This step will be skipped if 'python3-psutil' is not fully present.
+- name: Apply desired terminal settings via dconf.
+  loop: "{{ dconf_terminal_settings }}"
+  loop_control:
+    loop_var: dconf_terminal
+  when: psutil.stat.exists == true
+  community.general.dconf:
+    key: "{{ dconf_terminal.key }}"
+    value: "{{ dconf_terminal.value }}"
+    state: present
+
+# NOTE: This step will be skipped if 'python3-psutil' is not fully present.
+- name: Update the dconf database.
+  become: true
+  when: psutil.stat.exists == true
+  ansible.builtin.command: sudo dconf update
+
+- name: Configure Monday start for Calendar
+  become: true
+  ansible.builtin.lineinfile:
+    path: /etc/locale.conf
+    line: LC_TIME="en_GB.UTF-8"

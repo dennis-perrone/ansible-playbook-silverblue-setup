@@ -1,0 +1,24 @@
+---
+# vars file for common
+
+# These are the default directories created on first login
+default_dirs:
+  - Desktop
+  - Documents
+  - Downloads
+  - Music
+  - Pictures
+  - Public
+  - Templates
+  - Videos
+
+# VSCode/VSCodium Extensions
+vscode_extensions:
+  - eamodio.gitlens
+  - sainnhe.gruvbox-material
+  - esbenp.prettier-vscode
+  - tomoki1207.pdf
+  - valentjn.vscode-ltex
+  - PKief.material-icon-theme
+  - eamodio.gitlens
+  - redhat.vscode-yaml

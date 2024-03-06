@@ -1,0 +1,38 @@
+---
+
+# This file configures the local Samba share
+
+- name: Create mount point for Samba share
+  become: true
+  ansible.builtin.file:
+    path: /mnt/samba
+    state: directory
+    owner: "{{ sys_user }}"
+    group: users
+
+- name: Add Samba mount to fstab
+  become: true
+  ansible.builtin.blockinfile:
+    path: /etc/fstab
+    state: present
+    append_newline: true
+    prepend_newline: true
+    insertafter: EOF
+    block: |
+      {{ samba_fstab }}
+
+- name: Add Samba symlink to home directory
+  ansible.builtin.file:
+    src: /mnt/samba
+    dest: ~/share
+    owner: "{{ sys_user }}"
+    group: "{{ sys_user}}"
+    state: link
+
+- name: Configure Samba credentials
+  ansible.builtin.template:
+    src: templates/smbcreds.j2
+    dest: $HOME/.smbcreds
+    owner: "{{ sys_user }}"
+    group: "{{ sys_user }}"
+    mode: 0644

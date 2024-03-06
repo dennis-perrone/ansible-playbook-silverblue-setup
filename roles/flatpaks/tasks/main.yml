@@ -1,0 +1,29 @@
+---
+# tasks file for flatpaks
+
+- name: Add Flatpak remote for Flathub
+  loop: "{{ flatpak_remotes }}"
+  community.general.flatpak_remote:
+    name: "{{ item.name }}"
+    state: present
+    method: user
+    flatpakrepo_url: "{{ item.url }}"
+
+- name: Update Flatpak metadata
+  become: true
+  ansible.builtin.command: flatpak update --appstream
+
+- name: Remove unwanted Flatpak packages
+  loop: "{{ flatpak_pkgs_uninstall }}"
+  become: true
+  community.general.flatpak:
+    name: "{{ item }}"
+    state: absent
+
+- name: Install Flatpak packages
+  loop: "{{ flatpak_pkgs_install }}"
+  community.general.flatpak:
+    name: "{{ item.package }}"
+    state: present
+    method: user
+    remote: "{{ item.remote }}"

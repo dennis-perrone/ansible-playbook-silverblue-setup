@@ -1,0 +1,22 @@
+---
+# vars file for flatpaks
+
+flatpak_remotes:
+  - { name: 'flathub', url: 'https://dl.flathub.org/repo/flathub.flatpakrepo' }
+
+flatpak_pkgs_install:
+  - { remote: 'flathub', package: 'com.brave.Browser' }
+  - { remote: 'flathub', package: 'org.signal.Signal' }
+  # - { remote: 'flathub', package: 'com.slack.Slack' }
+  - { remote: 'flathub', package: 'com.github.tchx84.Flatseal' }
+  - { remote: 'flathub', package: 'org.mozilla.firefox' }
+  - { remote: 'flathub', package: 'org.freedesktop.Platform.ffmpeg-full/x86_64/22.08' }
+  - { remote: 'flathub', package: 'com.mattjakeman.ExtensionManager' }
+  # - { remote: 'flathub', package: 'com.spotify.Client' }
+  - { remote: 'flathub', package: 'io.podman_desktop.PodmanDesktop' }
+  - { remote: 'flathub', package: 'com.getpostman.Postman' }
+
+flatpak_pkgs_uninstall:
+  - org.gnome.Calculator
+  - org.gnome.Cheese
+  - org.gnome.Extensions

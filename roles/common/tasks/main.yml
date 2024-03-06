@@ -1,0 +1,31 @@
+---
+# tasks file for common
+
+- name: Generate an OpenSSH keypair with the default values (4096 bits, rsa) and encrypted private key
+  community.crypto.openssh_keypair:
+    path: ~/.ssh/id_ssh_rsa
+
+- name: Configure Git
+  tags: git
+  ansible.builtin.import_tasks:
+    file: git.yml
+
+- name: Configure home directory
+  tags: home_dir
+  ansible.builtin.import_tasks:
+    file: home_dir.yml
+
+- name: Configure Samba share
+  tags: samba
+  ansible.builtin.import_tasks:
+    file: samba.yml
+
+- name: Configure Distrobox
+  tags: distrobox
+  ansible.builtin.import_tasks:
+    file: distrobox.yml
+
+# - name: Configure VSCode
+#   tags: vscode
+#   ansible.builtin.import_tasks:
+#     file: vscode.yml

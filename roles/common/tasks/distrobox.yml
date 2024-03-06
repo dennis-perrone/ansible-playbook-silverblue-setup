@@ -1,0 +1,24 @@
+---
+
+# - name: Create distrobox directory
+- name: Create distrobox directory
+  ansible.builtin.file:
+    path: $HOME/documents/distrobox
+    state: directory
+    mode: '0755'
+
+- name: Copy distrobox configuration file to host
+  ansible.builtin.copy:
+    src: ../files/distrobox.ini
+    dest: "/var/home/{{ sys_user }}/documents/distrobox/distrobox.ini"
+    owner: "{{ sys_user }}"
+    group: "{{ sys_user }}"
+    mode: '0644'
+
+# Hack since there is no --yes flag for distrobox assemble
+# - name: Pull distrobox images
+#   containers.podman.podman_image:
+#     name: fedora:latest
+
+# - name: Create distroboxes from config file
+#   ansible.builtin.command: distrobox assemble create --file $HOME/documents/distrobox/distrobox.ini

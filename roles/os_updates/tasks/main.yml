@@ -1,0 +1,11 @@
+---
+# tasks file for os_updates
+
+- name: Configure update settings
+  become: true
+  ansible.builtin.template:
+    src: templates/rpm-ostreed.conf.j2
+    dest: /etc/rpm-ostreed.conf
+    owner: root
+    group: root
+    mode: 0644

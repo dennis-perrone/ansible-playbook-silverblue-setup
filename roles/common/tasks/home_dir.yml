@@ -1,0 +1,30 @@
+---
+
+- name: Remove default directories
+  loop: "{{ default_dirs }}"
+  ansible.builtin.file:
+    path: /var/home/{{ sys_user }}/{{ item }}/
+    state: absent
+  
+- name: Remove default user XDG configuration
+  ansible.builtin.file:
+    path: /var/home/{{ sys_user }}/.config/user-dirs.dirs
+    state: absent
+
+- name: Remove standard XDG user directory configuration
+  become: true
+  ansible.builtin.file:
+    path: /etc/xdg/user-dirs.defaults
+    state: absent
+
+- name: Configure XDG user directories
+  become: true
+  ansible.builtin.template:
+    src: ../templates/user-dirs.defaults.j2
+    dest: /etc/xdg/user-dirs.defaults
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Update local user directories.
+  ansible.builtin.command: xdg-user-dirs-update --force

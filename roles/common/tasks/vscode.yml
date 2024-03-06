@@ -1,0 +1,6 @@
+---
+
+- name: Install VSCode/VSCodium Extensions
+  loop: "{{ vscode_extensions }}"
+  command: codium --install-extension "{{ item }}"
+  # command: code --install-extension "{{ item }}"

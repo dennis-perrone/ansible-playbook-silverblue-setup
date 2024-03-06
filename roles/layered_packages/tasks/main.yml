@@ -1,0 +1,67 @@
+---
+# tasks file for layered_packages
+
+- name: Check to see if an rpm-ostree transaction is currently running
+  register: ostree_status
+  failed_when: ostree_status.rc == "999"  # Don't fail, regardless of return code
+  ansible.builtin.command: pgrep rpm-ostree
+
+- name: Cancel a current rpm-ostree update when an update is currently running.
+  when: ostree_status.rc != 1  
+  ansible.builtin.command: rpm-ostree cancel
+
+# Workaround to metadata mismatch. Will remove when fixed.
+- name: Disable Fedora Cisco OpenH264 repo
+  become: true
+  ansible.builtin.lineinfile:
+    path: /etc/yum.repos.d/fedora-cisco-openh264.repo
+    regexp: '^enabled='
+    line: enabled=0
+    firstmatch: true
+
+- name: Attempt to install layered packages
+  block:
+    - name: Install layered applications
+      become: true
+      become_method: sudo
+      loop: "{{ layered_pkg_install }}"
+      register: install_status
+      community.general.rpm_ostree_pkg:
+        name: "{{ item }}"
+        state: present
+      # apply_live: true  # This feature is not yet available
+  rescue:
+    - name: Unable to install layered packages
+      ansible.builtin.debug:
+        msg: "Unable to install layered packages. Please execute manually."
+
+- name: Remove applications from the base OS
+  block:
+    - name: Remove applications from the base OS
+      become: true
+      become_method: sudo
+      loop: "{{ base_pkg_uninstall }}"
+      ansible.builtin.command: rpm-ostree override remove {{ item }}
+  rescue:
+    - name: Unable to remove applications
+      ansible.builtin.debug:
+        msg: "The previous action is an expected failure. Package(s) not present on the base OS from previous override."
+
+- ansible.builtin.debug:
+    msg: "A reboot is required to complete installation / removal of these packages"
+
+- name: Query whether booted RPM-OSTree deployment is first deployment
+  register: booted
+  shell: rpm-ostree status --json | jq -r .deployments[0].booted
+
+- name: Reboot if new deployement is ready.
+  become: true
+  when:
+    - booted.stdout == "false"
+  reboot:
+    reboot_timeout: 300
+
+- name: Configure libvirt settings
+  tags: libvirt
+  ansible.builtin.import_tasks:
+    file: libvirt.yml

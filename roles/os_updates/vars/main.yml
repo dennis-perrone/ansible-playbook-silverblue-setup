@@ -1,0 +1,5 @@
+---
+# vars file for os_updates
+
+update_policy: stage
+idle_timeout: '600'

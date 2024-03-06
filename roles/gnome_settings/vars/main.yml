@@ -1,0 +1,25 @@
+---
+# vars file for gnome_settings
+
+dconf_general_settings:
+- { key: '/org/gnome/settings-daemon/plugins/color/night-light-enabled', value: 'true' }
+- { key: '/org/gnome/desktop/privacy/remember-recent-files', value: 'true' }
+- { key: '/org/gnome/desktop/privacy/remove-old-trash-files', value: 'true' }
+- { key: '/org/gnome/desktop/privacy/remove-old-temp-files', value: 'true' }
+- { key: '/org/gnome/desktop/privacy/old-files-age', value: 'uint32 14' }
+- { key: '/org/gnome/desktop/session/idle-delay', value: 'uint32 480' }
+- { key: '/org/gnome/desktop/screensaver/lock-delay', value: 'uint32 1800' }
+- { key: '/org/gnome/desktop/interface/clock-format', value: "'12h'" }
+- { key: '/org/gtk/settings/file-chooser/clock-format', value: "'12h'" }
+- { key: '/org/gnome/desktop/wm/preferences/button-layout', value: "'appmenu:minimize,maximize,close'" }
+
+dconf_terminal_settings:
+# - { key: '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/name', value: "'Launch Terminal'" }
+# - { key: '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/command', value: "'gnome-terminal'"}
+# - { key: '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/binding', value: "'<Super>t'" }
+# - { key: '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings', value: '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/' }
+- { key: '/org/gnome/terminal/legacy/profiles:/:b1dcc9dd-5262-4d8d-a863-c897e6d979b9/use-transparent-background', value: 'true' }
+- { key: '/org/gnome/terminal/legacy/profiles:/:b1dcc9dd-5262-4d8d-a863-c897e6d979b9/background-transparency-percent', value: '15' }
+
+
+# - { key: '', value: '' }

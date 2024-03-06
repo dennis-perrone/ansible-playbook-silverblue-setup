@@ -1,0 +1,27 @@
+---
+
+# Tasks to configure libvirt on the local system.
+
+- name: Configure polkit to allow "wheel" group to manage libvirt
+  become: true
+  ansible.builtin.template:
+    src: templates/80-libvirt-manage.rules.j2
+    dest: /etc/polkit-1/rules.d/80-libvirt-manage.rules
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Start and enable libvirt service
+  become: true
+  ansible.builtin.systemd_service:
+    name: libvirtd
+    state: started
+    enabled: true
+
+- name: Create libvirt directories
+  loop: "{{ libvirt_working_dirs }}"
+  ansible.builtin.file:
+    path: "/var/home/{{ sys_user }}/virtual-machines/{{ item }}"
+    state: directory
+    owner: "{{ sys_user }}"
+    group: "{{ sys_user }}"

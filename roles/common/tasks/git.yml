@@ -1,0 +1,26 @@
+---
+
+- name: Configure global git settings
+  loop: "{{ git_settings }}"
+  loop_control:
+    loop_var: git
+  community.general.git_config:
+    name: "{{ git.name }}"
+    scope: global
+    value: "{{ git.value }}"
+
+- name: Clone public git repositories
+  loop: "{{ git_repo_public }}"
+  loop_control:
+    loop_var: git_repo
+  ansible.builtin.git:
+    repo: https://github.com/{{ git_settings[0]['value'] }}/{{ git_repo.name }}
+    dest: $HOME/development/{{ git_repo.dir_name }}
+
+- name: Clone wikis
+  loop: "{{ git_wiki }}"
+  loop_control:
+    loop_var: wiki
+  ansible.builtin.git:
+    repo: https://github.com/{{ git_settings[0]['value'] }}/{{ wiki.name }}
+    dest: $HOME/wiki/{{ wiki.dir_name }}
