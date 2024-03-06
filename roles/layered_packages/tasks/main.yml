@@ -58,7 +58,7 @@
   become: true
   when:
     - booted.stdout == "false"
-  reboot:
+  ansible.builtin.reboot:
     reboot_timeout: 300
 
 - name: Configure libvirt settings
