@@ -15,6 +15,14 @@
   ansible.builtin.import_tasks:
     file: home_dir.yml
 
+- name: Copy crontab backup to host
+  ansible.builtin.copy:
+    src: ../files/crontab
+    dest: "/var/home/{{ sys_user }}/documents/crontab"
+    owner: "{{ sys_user }}"
+    group: "{{ sys_user }}"
+    mode: '0644'
+
 - name: Configure Samba share
   tags: samba
   ansible.builtin.import_tasks:
