@@ -6,12 +6,12 @@ An Ansible playbook to set up a vanilla Fedora Silverblue box.
 
 ## Steps
 
-- On a vanilla box, run `mkdir -p $HOME/temp; cd $_`.
+- On a vanilla box, run `mkdir -p $HOME/temp; cd $_`
 - Enter `git clone https://github.com/dennis-perrone/ansible.git`
-- Change into the Ansible directory.
-- Create a virtual environment by entering `python3 -m venv .`.
-- Run `bin/pip3 install ansible`.
-- Execute playbook by entering `ansible-playbook -i inventory -K --ask-vault-pass site.yml` 
+- Change into the Ansible directory
+- Create a virtual environment by entering `python3 -m venv .`
+- Run `bin/pip3 install ansible`
+- Execute playbook by entering `bin/ansible-playbook -i inventory -K --ask-vault-pass site.yml` 
 
 ## Tags
 
